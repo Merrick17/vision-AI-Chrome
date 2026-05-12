@@ -1,31 +1,65 @@
 {
   "name": "vision",
   "displayName": "Vision",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "AI smart Agent Browser Extension",
   "author": "safwen.benfredj@gmail.com",
   "scripts": {
     "dev": "plasmo dev",
     "build": "plasmo build",
-    "package": "plasmo package"
+    "package": "plasmo package",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write \"src/**/*.{ts,tsx,css}\""
   },
   "dependencies": {
+    "@plasmohq/messaging": "^0.7.2",
+    "@plasmohq/storage": "^1.15.0",
+    "@supabase/supabase-js": "^2.105.4",
+    "ai": "^6.0.177",
+    "framer-motion": "^12.38.0",
+    "lucide-react": "^1.14.0",
+    "ollama-ai-provider-v2": "^3.5.0",
     "plasmo": "0.90.5",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react": "19.2.6",
+    "react-dom": "19.2.6",
+    "zod": "^4.4.3",
+    "zustand": "^5.0.13"
   },
   "devDependencies": {
-    "@ianvs/prettier-plugin-sort-imports": "4.1.1",
-    "@types/chrome": "0.0.258",
-    "@types/node": "20.11.5",
-    "@types/react": "18.2.48",
-    "@types/react-dom": "18.2.18",
-    "prettier": "3.2.4",
-    "typescript": "5.3.3"
+    "@ianvs/prettier-plugin-sort-imports": "4.7.1",
+    "@types/chrome": "0.1.42",
+    "@types/node": "25.6.2",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "autoprefixer": "^10.5.0",
+    "jiti": "2.4.2",
+    "postcss": "^8.5.14",
+    "prettier": "3.8.3",
+    "tailwindcss": "^3.4.19",
+    "typescript": "6.0.3"
+  },
+  "alias": {
+    "zod": "zod/v4"
   },
   "manifest": {
+    "permissions": [
+      "activeTab",
+      "storage",
+      "tabs",
+      "scripting",
+      "sidePanel"
+    ],
     "host_permissions": [
       "https://*/*"
+    ],
+    "action": {
+      "default_title": "Vision"
+    },
+    "web_accessible_resources": [
+      {
+        "resources": ["tabs/permission.html"],
+        "matches": ["<all_urls>"]
+      }
     ]
   }
 }

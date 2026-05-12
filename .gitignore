@@ -20,7 +20,11 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # local env files
+.env
 .env*.local
+
+# Cursor / Claude local overrides
+.claude/
 
 out/
 build/
@@ -31,3 +35,6 @@ dist/
 
 # typescript
 .tsbuildinfo
+branch_structure.json
+temp_auto_push.bat
+temp_interactive_push.bat
