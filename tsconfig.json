@@ -5,13 +5,16 @@
   ],
   "include": [
     ".plasmo/index.d.ts",
-    "./**/*.ts",
-    "./**/*.tsx"
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.d.ts"
   ],
   "compilerOptions": {
+    "ignoreDeprecations": "6.0",
+    "types": ["chrome"],
     "paths": {
       "~*": [
-        "./*"
+        "./src/*"
       ]
     },
     "baseUrl": "."

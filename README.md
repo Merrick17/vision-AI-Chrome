@@ -1,33 +1,69 @@
-This is a [Plasmo extension](https://docs.plasmo.com/) project bootstrapped with [`plasmo init`](https://www.npmjs.com/package/plasmo).
+# Vision
 
-## Getting Started
+Vision is a **Chrome extension** (Plasmo, Manifest V3) that runs an AI browser agent in the extension: chat in the side panel, tools for tabs and page interaction, optional voice, memory, and RAG (Supabase). Requests go to **Ollama Cloud** from the extension; there is no separate Node backend.
 
-First, run the development server:
+## Requirements
 
-```bash
-pnpm dev
-# or
-npm run dev
-```
+- [Node.js](https://nodejs.org/) 20+
+- [pnpm](https://pnpm.io/) (recommended; npm works if you adjust commands)
 
-Open your browser and load the appropriate development build. For example, if you are developing for the chrome browser, using manifest v3, use: `build/chrome-mv3-dev`.
+## Quick start
 
-You can start editing the popup by modifying `popup.tsx`. It should auto-update as you make changes. To add an options page, simply add a `options.tsx` file to the root of the project, with a react component default exported. Likewise to add a content page, add a `content.ts` file to the root of the project, importing some module and do some logic, then reload the extension on your browser.
+1. Install dependencies:
 
-For further guidance, [visit our Documentation](https://docs.plasmo.com/)
+   ```bash
+   pnpm install
+   ```
 
-## Making production build
+2. **Ollama Cloud API key** (required for the model):
 
-Run the following:
+   - Copy `.env.example` to `.env` and set `PLASMO_PUBLIC_OLLAMA_CLOUD_TOKEN`, **or**
+   - Paste the key in the extension **Settings** after loading the build (keys in Settings are not committed).
 
-```bash
-pnpm build
-# or
-npm run build
-```
+   Plasmo inlines only variables prefixed with `PLASMO_PUBLIC_` into the dev bundle.
 
-This should create a production bundle for your extension, ready to be zipped and published to the stores.
+3. Run the dev build:
 
-## Submit to the webstores
+   ```bash
+   pnpm dev
+   ```
 
-The easiest way to deploy your Plasmo extension is to use the built-in [bpp](https://bpp.browser.market) GitHub action. Prior to using this action however, make sure to build your extension and upload the first version to the store to establish the basic credentials. Then, simply follow [this setup instruction](https://docs.plasmo.com/framework/workflows/submit) and you should be on your way for automated submission!
+4. In Chrome, open **Extensions → Developer mode → Load unpacked** and select the dev output folder (e.g. `build/chrome-mv3-dev`).
+
+5. Click the Vision toolbar icon to open the **side panel** (primary UI).
+
+## Scripts
+
+| Command        | Description                    |
+| -------------- | ------------------------------ |
+| `pnpm dev`     | Plasmo dev server + HMR        |
+| `pnpm build`   | Production extension bundle    |
+| `pnpm package` | Zip for store submission       |
+| `pnpm typecheck` | `tsc --noEmit`               |
+| `pnpm format`  | Prettier on `src/**`           |
+
+## Optional: Supabase (RAG)
+
+If you use RAG indexing/search, configure Supabase URL and anon key in **Settings** (see `supabase/migration.sql` for schema). The app works without Supabase for core chat and browser tools.
+
+## Project layout (short)
+
+| Path | Role |
+| ---- | ---- |
+| `src/sidepanel/` | React UI (chat, settings, voice) |
+| `src/background/` | Service worker, AI `streamText` port, messaging |
+| `src/contents/` | Content scripts (page context, interaction) |
+| `src/tools/` | Tool definitions the model can call |
+| `CLAUDE.md` | Product and engineering conventions for contributors |
+
+## Agent loop limits
+
+Tool-using runs use the Vercel AI SDK `stopWhen: stepCountIs(...)` so each reply has a finite cap on model/tool rounds. The limit is set in `src/background/ports/stream.ts` (`AGENT_MAX_STEPS`). If very long automations hit the cap, increase that constant or split the task across messages.
+
+## Security note
+
+Do not commit `.env` or real API keys. Use `.env.example` as a template only.
+
+## License
+
+See `package.json` / repository for license information.
